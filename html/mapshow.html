@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=1nCQCnDr3Nt3GKDVeBmKGe2Y"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils_min.js"></script>
+
+</head>
+<body>
+<div id="allmap" style="width:1900px;height:900px"></div>
+<div id="divInfo"></div>
+</body>
+</html>
+<script type="text/javascript">
+
+    window.onload = function () {
+
+        var map = new BMap.Map("allmap");
+        map.centerAndZoom(new BMap.Point(118.78, 32.07), 5);
+        map.enableScrollWheelZoom();
+
+
+        var bdary = new BMap.Boundary();
+        bdary.get("栖霞区", function (rs) {       //获取行政区域
+            //alert("hhh");
+            map.clearOverlays();        //清除地图覆盖物
+            var count = rs.boundaries.length; //行政区域的点有多少个
+            if (count === 0) {
+                alert('未能获取当前输入行政区域');
+                return;
+            }
+            var pointArray = [];
+            //产生用户坐标
+            for (var i = 0; i < count; i++) {
+
+                var ply = new BMap.Polygon(rs.boundaries[i]); //建立多边形覆盖物
+                map.addOverlay(ply);  //添加覆盖物
+                pointArray = pointArray.concat(ply.getPath());
+                map.setViewport(pointArray);
+
+                //var res = "", minX = 118.78, minY = 32.07, x = 0, y = 0, pt = null;
+
+
+                var re = readfile("/SmartExpress/data/user.txt");
+                var data = re.split("\r\n");
+                //alert(data.length);
+                var number = 0;
+                while (number < data.length - 1) {
+                    console.log(number);
+                    //处理
+                    //alert(data[count]);
+                    var row = data[number].split(",");
+                    //alert(row[0])
+                    var x = row[0];
+                    var y = row[1];
+                    //alert(row[0]+"-"+row[1]);
+                    var marker = new BMap.Marker(new BMap.Point(x, y));
+
+                    map.addOverlay(marker);
+                    number++;
+                    // pt = new BMap.Point(x, y);
+                    // if (BMapLib.GeoUtils.isPointInPolygon(pt, ply)) {
+                    //
+                    //     count--;
+                    //
+                    //     var marker  = new BMap.Marker(new BMap.Point(x, y));
+                    //
+                    //     map.addOverlay(marker);
+                    //     //格式：x,y,包裹重量，体积参数(长，宽，高)
+                    //     data += x+","+y+","+getExpressInfo()+","+getRandom().toFixed(1)*50+","+getRandom().toFixed(1)*50+","+getRandom().toFixed(1)+"\r\n";
+                    //     //res += 'marker = new BMap.Marker(new BMap.Point(' + x + ' ,' + y + '));<br/>map.addOverlay(marker);<br/>  ';
+                    // }
+                }
+
+                //var name = 'user.txt';
+                //exportRaw(data, name);
+
+                // divInfo.innerHTML = res;
+            }
+
+            //产生快递点坐标
+            var EsIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {
+                offset: new BMap.Size(10, 25), // 指定定位位置
+                imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移
+            });
+            //var EsList = [new Object(118.968613,32.113574), new Object(118.946726,32.133932), new Object(118.953442,32.108015), new Object(118.879366,32.127609),new Object(118.924569,32.106687)];
+            var marker = new BMap.Marker(new BMap.Point(118.968613, 32.113574), {icon: EsIcon});
+            map.addOverlay(marker);
+            var marker = new BMap.Marker(new BMap.Point(118.946726, 32.133932), {icon: EsIcon});
+            map.addOverlay(marker);
+            var marker = new BMap.Marker(new BMap.Point(118.953442, 32.108015), {icon: EsIcon});
+            map.addOverlay(marker);
+            var marker = new BMap.Marker(new BMap.Point(118.879366, 32.127609), {icon: EsIcon});
+            map.addOverlay(marker);
+            var marker = new BMap.Marker(new BMap.Point(118.924569, 32.106687), {icon: EsIcon});
+            map.addOverlay(marker);
+
+            //map.setViewport(pointArray);    //调整视野
+            //addlabel();
+        });
+
+        //document.getElementById("divInfo").innerHTML = Math.random()/4;
+
+    };
+
+
+    function getRandom() {
+        return Math.random();
+    }
+
+    function getExpressInfo() {
+        var a = Math.random();           //生成0——1的随机数
+        a = a * 10;                        //0——10的随机数
+        a = Math.ceil(a) - 1;
+        return (a + getRandom()).toFixed(2);
+    }
+
+    function saveFile() {
+        var data = document.querySelector('#text').value;
+        // var data = '自定义的数据内容，可以是服务端返回滴！';
+
+
+    }
+
+    function exportRaw(data, name) {
+        var urlObject = window.URL || window.webkitURL || window;
+        var export_blob = new Blob([data]);
+        var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
+        save_link.href = urlObject.createObjectURL(export_blob);
+        save_link.download = name;
+        save_link.click();
+    }
+
+    function readfile(filename) {
+        var xhr = new XMLHttpRequest(),
+            okStatus = document.location.protocol === "file:" ? 0 : 200;
+        xhr.open('GET', filename, false);
+        xhr.overrideMimeType("text/html;charset=utf-8");//默认为utf-8
+        xhr.send(null);
+        //alert(xhr.responseText);
+        return xhr.status === okStatus ? xhr.responseText : null;
+    }
+</script>
