@@ -26,7 +26,7 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
         HashMap<Integer, Object> comparedMap = (HashMap<Integer, Object>) InitUserAllocation.clone();//待比较的map
 
         //统计最终结果:总成本
-        HashMap<Integer,Double> resultMap = new HashMap<>();
+        HashMap<Integer, Double> resultMap = new HashMap<>();
 
         int NumberIterations = 100000;
         int IterationsCount = 1;
@@ -38,7 +38,7 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
 
 //            System.out.println("总成本为：" + calcluateTotalCost(reverseMap, ESlist, userList));
             //2.对所有快递点（联盟）进行遍历，随机选择一个用户，计算机效用最大的一个联盟（快递点）加入
-
+            //Collections.reverse(userList);
             for (int i = 0; i < userList.size(); i++) {
 //                System.out.println(i+"-map:"+reverseMap);
 //                System.out.println("用户id："+i);
@@ -73,7 +73,7 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
                             newUserlist.add(userList.get(useridbyEs));
                         }
                         //System.out.println("当前ES id："+j+" 效用函数为："+utilityFunction(userlist, ESlist.get(j), user, userOldCharege, userOldMoving));
-                        if (isGameTransferFeasible(newUserlist, ESlist.get(j), user, userOldCharege, userOldMoving) && (Integer) InitUserAllocation.get(i) != j) {
+                        if (isGameTransferFeasible(newUserlist, ESlist.get(j), user, userOldCharege, userOldMoving)) {
                             //&& (Integer) InitUserAllocation.get(i) != j
                             //可以转换
                             double temp = utilityFunction(newUserlist, ESlist.get(j), user, userOldCharege, userOldMoving);
@@ -95,17 +95,19 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
                     //在新联盟中增加该用户id
                     // ((List<Integer>) reverseMap.get(maxEsId)).add(user.getId());
 
-                }
+                } else
+                    break;
 //                System.out.println(reverseMap);
             }
-            currentTotalCost =(double) Math.round(calcluateTotalCost(reverseMap, ESlist, userList) * 10000) / 10000 ;
+            //   currentTotalCost =(double) Math.round(calcluateTotalCost(reverseMap, ESlist, userList) * 10000) / 10000 ;
+            currentTotalCost = calcluateTotalCost(reverseMap, ESlist, userList);
 //            System.out.println("userseletion:" + InitUserAllocation.get(0));
-            if (isEqualsTwoMap(InitUserAllocation, comparedMap)||isTerminal(resultMap,currentTotalCost))
+            if (isEqualsTwoMap(InitUserAllocation, comparedMap) || isTerminal(resultMap, currentTotalCost))
                 NumberIterations = 0;
             else {
                 NumberIterations--;
                 //currentTotalCost = calcluateTotalCost(reverseMap, ESlist, userList);
-                resultMap.put(IterationsCount++,currentTotalCost);
+                resultMap.put(IterationsCount++, currentTotalCost);
             }
             comparedMap = (HashMap<Integer, Object>) InitUserAllocation.clone();
             System.out.println(resultMap);
@@ -145,13 +147,14 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
     }
 
     //判断是否终止
-    public static Boolean isTerminal(HashMap<Integer,Double> hashMap, double value){
+    public static Boolean isTerminal(HashMap<Integer, Double> hashMap, double value) {
 
-        if(hashMap.size()<=0)
+        if (hashMap.size() <= 0)
             return false;
         int minKey = (Integer) getKey(hashMap, (double) gerMinValue(hashMap));
         for (Map.Entry<Integer, Double> entry : hashMap.entrySet()) {
-            if (value == entry.getValue()&&entry.getKey().equals(minKey)) {
+            System.out.println("key=" + minKey + "-" + entry.getKey());
+            if (value == entry.getValue() && entry.getKey().equals(minKey)) {
                 return true;
             }
         }
@@ -164,7 +167,7 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
     public static Boolean isGameTransferFeasible(List<User> newCoalition, ExpressS newExpressS, User newUser, double userOldCharege, double userOldMoving) {
 
         //|| currentTotalCost <= calcluateTotalCost(reverseMap, ESlist, userList)
-        if (utilityFunction(newCoalition, newExpressS, newUser, userOldCharege, userOldMoving) >= 0)
+        if (utilityFunction(newCoalition, newExpressS, newUser, userOldCharege, userOldMoving) > 0)
             return true;
         else
             return false;

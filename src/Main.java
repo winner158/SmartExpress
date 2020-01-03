@@ -1,7 +1,4 @@
-import com.algorithm.CoGameBasedCoalitionOrderAlgorithmDesign;
-import com.algorithm.LowestChargeAlgorithmDesign;
-import com.algorithm.NearAlgorithmDesign;
-import com.algorithm.NearNotCoAlgorithmDesign;
+import com.algorithm.*;
 import com.config.Config;
 import com.entity.ExpressS;
 import com.entity.User;
@@ -29,7 +26,7 @@ public class Main {
         int count = 0;
         for (String str :
                 userSplit) {
-            if(count>7)
+            if(count>29)
                 break;
             User user = new User();
             String[] rowSplit = str.split(",");
@@ -86,6 +83,7 @@ public class Main {
         System.out.println(CoGameBasedCoalitionOrderAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));
 
 
+//        System.out.println(CoGameBasedSelifishOrderAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));
        // System.out.println(LowestChargeAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));
 
 
