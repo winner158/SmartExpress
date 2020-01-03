@@ -107,7 +107,7 @@ public class LowestChargeAlgorithmDesign {
                 totalMoving+=movingCost;
                 //总成本
                 double total = deleiverExpense + movingCost;
-                str.append((user.getId()+1) + "," + (key+1) + "," + deleiverExpense + "," + movingCost + "," + total + "\r\n");
+                str.append((user.getId()) + "," + (key) + "," + deleiverExpense + "," + movingCost + "," + total + "\r\n");
             }
         }
         try {

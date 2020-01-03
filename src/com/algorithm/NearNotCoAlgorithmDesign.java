@@ -80,7 +80,7 @@ public class NearNotCoAlgorithmDesign {
             for (Integer userid :
                     list) {
                 User user = userList.get(userid);
-                double deleiverExpense = CalculateDeleiverExpense.calculate(express.getFirstPrice(), express.getContinuePrice(), express.getScale(), user.getWeight(), user.getLengthP(), user.getWidthP(), user.getHeightP());;
+                double deleiverExpense = CalculateDeleiverExpense.calculate(express.getFirstPrice(), express.getContinuePrice(), express.getScale(), user.getWeight(), user.getLengthP(), user.getWidthP(), user.getHeightP());
                 totaltotal+=deleiverExpense;
                 //移动成本
                 double dist = CalculateDistance.distanceOfTwoPoints(user.getJingdu(), user.getWeidu(), express.getJingdu(), express.getWeidu());
@@ -88,7 +88,7 @@ public class NearNotCoAlgorithmDesign {
                 totalMoving+=movingCost;
                 //总成本
                 double total = deleiverExpense + movingCost;
-                str.append((user.getId()+1) + "," + (key+1) + "," + deleiverExpense + "," + movingCost + "," + total + "\r\n");
+                str.append((user.getId()) + "," + (key) + "," + deleiverExpense + "," + movingCost + "," + total + "\r\n");
             }
         }
         try {

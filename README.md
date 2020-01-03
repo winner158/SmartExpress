@@ -10,6 +10,11 @@
 #### 数据集效果图
 ![show](html/Es&user.png)
 
+#### 论文算法
+- package com.algorithm.CoGameBasedCoalitionOrderAlgorithmDesign 基于联盟顺序的合作寄件博弈算法
+
+- package com.algorithm.CoGameBasedSelifishOrderAlgorithmDesign 基于自私顺序的合作寄件博弈算法
+
 #### 算法对比实验(baseline)
 - package com.algorithm.NearNotCoAlgorithmDesign 就近非合作寄件分配算法
 主要思想：就近选择快递点，然后根据自己包裹的重量计算成本函数

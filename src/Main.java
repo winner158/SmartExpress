@@ -1,3 +1,4 @@
+import com.algorithm.CoGameBasedCoalitionOrderAlgorithmDesign;
 import com.algorithm.LowestChargeAlgorithmDesign;
 import com.algorithm.NearAlgorithmDesign;
 import com.algorithm.NearNotCoAlgorithmDesign;
@@ -28,6 +29,8 @@ public class Main {
         int count = 0;
         for (String str :
                 userSplit) {
+            if(count>7)
+                break;
             User user = new User();
             String[] rowSplit = str.split(",");
             user.setId(count++);
@@ -74,11 +77,14 @@ public class Main {
     public static void main(String[] args) {
 
         //HashMap<Integer, Object> integerObjectHashMap = NearAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList());
-        NearAlgorithmDesign.calcluateCost(getExpressSList(), getUserList(),"result/NearAlgorithmDesign.txt");
+//        NearAlgorithmDesign.calcluateCost(getExpressSList(), getUserList(),"result/NearAlgorithmDesign.txt");
+//
+//        LowestChargeAlgorithmDesign.calcluateCost(getExpressSList(), getUserList(),"result/LowestChargeAlgorithmDesign.txt");
+//
+//        NearNotCoAlgorithmDesign.calcluateCost(getExpressSList(), getUserList(),"result/NearNotCoAlgorithmDesign.txt");
 
-        LowestChargeAlgorithmDesign.calcluateCost(getExpressSList(), getUserList(),"result/LowestChargeAlgorithmDesign.txt");
+        System.out.println(CoGameBasedCoalitionOrderAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));
 
-        NearNotCoAlgorithmDesign.calcluateCost(getExpressSList(), getUserList(),"result/NearNotCoAlgorithmDesign.txt");
 
        // System.out.println(LowestChargeAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));
 
