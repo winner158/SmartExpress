@@ -8,7 +8,7 @@
 快递点编号 | 经度 |  纬度  
 
 #### 数据集效果图
-![show](html/Es&user.png)
+![show](html/map.png)
 
 #### 论文算法
 - package com.algorithm.CoGameBasedCoalitionOrderAlgorithmDesign 基于联盟顺序的合作寄件博弈算法
@@ -28,3 +28,5 @@
 <br> 主要思想：就近选择快递点，然后根据自己包裹的重量计算成本
 - package com.algorithm.LowestChargeAlgorithmDesign 最低支付成本算法
 <br> 主要思想：按照最低成本贪心选择
+- package com.algorithm.MathOptimizationAlgorithmDesign 数学优化
+<br> 主要思想：枚举各种情况

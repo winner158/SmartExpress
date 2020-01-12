@@ -26,7 +26,7 @@ public class Main {
         int count = 0;
         for (String str :
                 userSplit) {
-            if(count>29)
+            if(count>9)
                 break;
             User user = new User();
             String[] rowSplit = str.split(",");
@@ -58,6 +58,8 @@ public class Main {
         int count = 0;
         for (String str :
                 EsinfoSplit) {
+            if(count>2)
+                break;
             ExpressS es = new ExpressS();
             String[] rowSplit = str.split(",");
             es.setId(count++);
@@ -80,8 +82,15 @@ public class Main {
 //
 //        NearNotCoAlgorithmDesign.calcluateCost(getExpressSList(), getUserList(),"result/NearNotCoAlgorithmDesign.txt");
 
-        System.out.println(CoGameBasedCoalitionOrderAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));
+       // System.out.println(CoGameBasedCoalitionOrderAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));
 
+        List<Integer> numList = new ArrayList<>();
+        List<User> userList = getUserList();
+        System.out.println(userList.size());
+        for (int i = 0; i < userList.size(); i++) {
+            numList.add(i);
+        }
+        MathOptimizationAlgorithmDesign.calculateMinValue(getExpressSList(), getUserList(),numList);
 
 //        System.out.println(CoGameBasedSelifishOrderAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));
        // System.out.println(LowestChargeAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));

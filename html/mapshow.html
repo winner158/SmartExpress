@@ -17,12 +17,12 @@
     window.onload = function () {
 
         var map = new BMap.Map("allmap");
-        map.centerAndZoom(new BMap.Point(118.78, 32.07), 5);
+        map.centerAndZoom(new BMap.Point(118.738571,32.049883), 5);
         map.enableScrollWheelZoom();
 
 
         var bdary = new BMap.Boundary();
-        bdary.get("栖霞区", function (rs) {       //获取行政区域
+        bdary.get("南京市鼓楼区", function (rs) {       //获取行政区域
             //alert("hhh");
             map.clearOverlays();        //清除地图覆盖物
             var count = rs.boundaries.length; //行政区域的点有多少个
@@ -85,17 +85,30 @@
                 imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移
             });
             //var EsList = [new Object(118.968613,32.113574), new Object(118.946726,32.133932), new Object(118.953442,32.108015), new Object(118.879366,32.127609),new Object(118.924569,32.106687)];
-            var marker = new BMap.Marker(new BMap.Point(118.968613, 32.113574), {icon: EsIcon});
+            var marker  = new BMap.Marker(new BMap.Point(118.739998,32.061358),{icon:EsIcon});
             map.addOverlay(marker);
-            var marker = new BMap.Marker(new BMap.Point(118.946726, 32.133932), {icon: EsIcon});
+            var marker  = new BMap.Marker(new BMap.Point(118.748357,32.07377),{icon:EsIcon});
             map.addOverlay(marker);
-            var marker = new BMap.Marker(new BMap.Point(118.953442, 32.108015), {icon: EsIcon});
+            var marker  = new BMap.Marker(new BMap.Point(118.762703,32.097113),{icon:EsIcon});
             map.addOverlay(marker);
-            var marker = new BMap.Marker(new BMap.Point(118.879366, 32.127609), {icon: EsIcon});
+            var marker  = new BMap.Marker(new BMap.Point(118.768095,32.05766),{icon:EsIcon});
             map.addOverlay(marker);
-            var marker = new BMap.Marker(new BMap.Point(118.924569, 32.106687), {icon: EsIcon});
+            var marker  = new BMap.Marker(new BMap.Point(118.768817,32.07177),{icon:EsIcon});
             map.addOverlay(marker);
-
+            var marker  = new BMap.Marker(new BMap.Point(118.777186,32.10945),{icon:EsIcon});
+            map.addOverlay(marker);
+            var marker  = new BMap.Marker(new BMap.Point(118.757978,32.075561),{icon:EsIcon});
+            map.addOverlay(marker);
+            var marker  = new BMap.Marker(new BMap.Point(118.773854,32.085279),{icon:EsIcon});
+            map.addOverlay(marker);
+            var marker  = new BMap.Marker(new BMap.Point(118.754101,32.082315),{icon:EsIcon});
+            map.addOverlay(marker);
+            var marker  = new BMap.Marker(new BMap.Point(118.770362,32.112976),{icon:EsIcon});
+            map.addOverlay(marker);
+            var marker  = new BMap.Marker(new BMap.Point(118.78256,32.102783),{icon:EsIcon});
+            map.addOverlay(marker);
+            var marker  = new BMap.Marker(new BMap.Point(118.791545,32.119023),{icon:EsIcon});
+            map.addOverlay(marker);
             //map.setViewport(pointArray);    //调整视野
             //addlabel();
         });
