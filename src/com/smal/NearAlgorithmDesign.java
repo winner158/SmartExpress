@@ -1,4 +1,4 @@
-package com.algorithm;
+package com.smal;
 
 import com.config.Config;
 import com.entity.ExpressS;
@@ -10,7 +10,7 @@ import com.util.ImportAndExport;
 import java.util.*;
 
 /**
- * 就近寄件：就近寄件算法，即最低移动成本合作寄件分配算法
+ * 就近寄件：近寄件合作算法，即最低移动成本合作寄件分配算法
  * 主要思想：就近选择快递点，然后根据自己包裹的重量计算成本
  *
  * @Author: pfsun

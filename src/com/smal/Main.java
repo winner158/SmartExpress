@@ -1,7 +1,9 @@
-import com.large.*;
+package com.smal;
+
 import com.config.Config;
 import com.entity.ExpressS;
 import com.entity.User;
+import com.large.MathOptimizationAlgorithmDesign;
 import com.util.ImportAndExport;
 
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ public class Main {
         //1.加载数据
         String userinfo = null;
         try {
-            userinfo = ImportAndExport.importData("data/user.txt");
+            userinfo = ImportAndExport.importData("data/large-package-user.txt");
         }catch (Exception e){
             System.out.println(e.getMessage());
         }

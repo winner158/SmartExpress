@@ -13,4 +13,6 @@ public class Config {
 
     public static double continueWeightCriterion = 1;//续重重量
 
+    public static double threshold = 0.3;//  取值范围[0,1]
+
 }

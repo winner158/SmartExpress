@@ -1,4 +1,4 @@
-package com.algorithm;
+package com.large;
 
 import com.config.Config;
 import com.entity.ExpressS;
@@ -10,12 +10,14 @@ import com.util.ImportAndExport;
 import java.util.*;
 
 /**
- * 就近非合作寄件分配算法
- * 主要思想：就近选择快递点，然后根据自己包裹的重量计算成
+ * 就近寄件：近寄件合作算法，即最低移动成本合作寄件分配算法
+ * 主要思想：就近选择快递点，然后根据自己包裹的重量计算成本
+ *
  * @Author: pfsun
- * @Date: 2020-01-02 11:56
+ * @Date: 2020-01-02 11:53
  */
-public class NearNotCoAlgorithmDesign {
+public class NearAlgorithmDesign {
+
 
     //计算每个用户距离每一个快递点的距离，选择距离最小的哪一个作为自己的选择.输出结果：userid=>ESId
     public static HashMap<Integer, Object> alocationMechnism(List<ExpressS> ESlist, List<User> userList) {
@@ -77,11 +79,14 @@ public class NearNotCoAlgorithmDesign {
 
             ExpressS express = ESlist.get(key);
 
+            //总支付成本
+            double deleiverExpenseTotal = CalculateDeleiverExpense.calculate(express.getFirstPrice(), express.getContinuePrice(), express.getScale(), totalWeight, 0, 0, 0);
+            totaltotal+=deleiverExpenseTotal;
+            System.out.println("NearAlgorithmDesign:"+totaltotal);
             for (Integer userid :
                     list) {
                 User user = userList.get(userid);
-                double deleiverExpense = CalculateDeleiverExpense.calculate(express.getFirstPrice(), express.getContinuePrice(), express.getScale(), user.getWeight(), user.getLengthP(), user.getWidthP(), user.getHeightP());
-                totaltotal+=deleiverExpense;
+                double deleiverExpense = (user.getWeight()/totalWeight)*deleiverExpenseTotal;
                 //移动成本
                 double dist = CalculateDistance.distanceOfTwoPoints(user.getJingdu(), user.getWeidu(), express.getJingdu(), express.getWeidu());
                 double movingCost = Config.unitCost * dist;
@@ -96,8 +101,8 @@ public class NearNotCoAlgorithmDesign {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("NearNotCoAlgorithmDesign:charge-"+totaltotal);
-        System.out.println("NearNotCoAlgorithmDesign:moving-"+totalMoving);
+        System.out.println("NearAlgorithmDesign:charge-"+totaltotal);
+        System.out.println("NearAlgorithmDesign:moving-"+totalMoving);
     }
 
 
@@ -121,4 +126,5 @@ public class NearNotCoAlgorithmDesign {
         }
         return key;
     }
+
 }

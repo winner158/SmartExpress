@@ -1,4 +1,4 @@
-package com.algorithm;
+package com.smal;
 
 import com.config.Config;
 import com.entity.ExpressS;

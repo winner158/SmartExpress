@@ -1,21 +1,20 @@
-package com.algorithm;
+package com.smal;
 
 import com.config.Config;
 import com.entity.ExpressS;
 import com.entity.User;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.util.CalculateDeleiverExpense;
 import com.util.CalculateDistance;
 
 import java.util.*;
 
 /**
- * 基于联盟顺序的合作寄件博弈算法
+ * 基于自私顺序的合作寄件博弈算法
  *
  * @Author: pfsun
- * @Date: 2020-01-02 11:56
+ * @Date: 2020-01-03 10:43
  */
-public class CoGameBasedCoalitionOrderAlgorithmDesign {
+public class CoGameBasedSelifishOrderAlgorithmDesign {
 
 
     public static HashMap<Integer, Object> alocationMechnism(List<ExpressS> ESlist, List<User> userList) {
@@ -65,7 +64,7 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
                 //候选集合
                 HashMap<Integer, Double> userSelect = new HashMap<Integer, Double>();
                 for (int j = 0; j < ESlist.size(); j++) {
-                    if (j != (Integer) InitUserAllocation.get(i)) {
+                    if (!InitUserAllocation.get(i).equals(j)) {
                         List<Integer> newUserIdlist = (List<Integer>) reverseMap.get(j);
                         List<User> newUserlist = new ArrayList<>();
                         for (Integer useridbyEs :
@@ -95,8 +94,7 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
                     //在新联盟中增加该用户id
                     // ((List<Integer>) reverseMap.get(maxEsId)).add(user.getId());
 
-                } else
-                    break;
+                }
 //                System.out.println(reverseMap);
             }
             //   currentTotalCost =(double) Math.round(calcluateTotalCost(reverseMap, ESlist, userList) * 10000) / 10000 ;
@@ -149,15 +147,14 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
     //判断是否终止
     public static Boolean isTerminal(HashMap<Integer, Double> hashMap, double value) {
 
-        if (hashMap.size() <= 0)
-            return false;
-        int minKey = (Integer) getKey(hashMap, (double) gerMinValue(hashMap));
-        for (Map.Entry<Integer, Double> entry : hashMap.entrySet()) {
-            System.out.println("key=" + minKey + "-" + entry.getKey());
-            if (value == entry.getValue() && entry.getKey().equals(minKey)) {
-                return true;
-            }
-        }
+//        if (hashMap.size() <= 0)
+//            return false;
+//        int minKey = (Integer) getKey(hashMap, (double) gerMinValue(hashMap));
+//        for (Map.Entry<Integer, Double> entry : hashMap.entrySet()) {
+//            if (value == entry.getValue() && entry.getKey().equals(minKey)) {
+//                return true;
+//            }
+//        }
         return false;
 
     }
@@ -166,8 +163,23 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
     //判断是否可以加入该联盟
     public static Boolean isGameTransferFeasible(List<User> newCoalition, ExpressS newExpressS, User newUser, double userOldCharege, double userOldMoving) {
 
+        double weight = 0;
+        double movingCost = 0;
+        for (User user :
+                newCoalition) {
+            weight += user.getWeight();
+            movingCost += user.getUnitCost() * CalculateDistance.distanceOfTwoPoints(user.getJingdu(), user.getWeidu(), newExpressS.getJingdu(), newExpressS.getWeidu());
+        }
+        //联盟中其他用户的支付成本：该用户加入之前，该用户加入之后
+        double beforeJoinTotalCharge = CalculateDeleiverExpense.calculate(newExpressS.getFirstPrice(), newExpressS.getContinuePrice(), newExpressS.getScale(), weight, 0, 0, 0);
+        double afterJoinTotalChargeIncludingMe = CalculateDeleiverExpense.calculate(newExpressS.getFirstPrice(), newExpressS.getContinuePrice(), newExpressS.getScale(), weight + newUser.getWeight(), 0, 0, 0);
+        //加入之后该用户效用的变化
+        double afterJoinNewUserCharge = newUser.getWeight() / (weight + newUser.getWeight()) * afterJoinTotalChargeIncludingMe;
+        double afterJoinTotalCharge = afterJoinTotalChargeIncludingMe - afterJoinNewUserCharge;
+        double userNewMoving = newUser.getUnitCost() * CalculateDistance.distanceOfTwoPoints(newUser.getJingdu(), newUser.getWeidu(), newExpressS.getJingdu(), newExpressS.getWeidu());
+
         //|| currentTotalCost <= calcluateTotalCost(reverseMap, ESlist, userList)
-        if (utilityFunction(newCoalition, newExpressS, newUser, userOldCharege, userOldMoving) > 0)
+        if (utilityFunction(newCoalition, newExpressS, newUser, userOldCharege, userOldMoving) > 0 && (beforeJoinTotalCharge - afterJoinTotalCharge) >= 0 && (userOldCharege - afterJoinNewUserCharge + userOldMoving - userNewMoving) > 0)
             return true;
         else
             return false;
@@ -260,5 +272,4 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
         }
         return true;
     }
-
 }
