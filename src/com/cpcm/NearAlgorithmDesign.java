@@ -1,4 +1,4 @@
-package com.large;
+package com.cpcm;
 
 import com.config.Config;
 import com.entity.ExpressS;
@@ -16,7 +16,7 @@ import java.util.*;
  * @Author: pfsun
  * @Date: 2020-01-02 11:53
  */
-public class NearAlgorithmDesign {
+public class  NearAlgorithmDesign {
 
 
     //计算每个用户距离每一个快递点的距离，选择距离最小的哪一个作为自己的选择.输出结果：userid=>ESId
@@ -69,13 +69,16 @@ public class NearAlgorithmDesign {
                 totalWeight += user.getWeight();
                 //移动成本
                 double dist = CalculateDistance.distanceOfTwoPoints(user.getJingdu(), user.getWeidu(), e.getJingdu(), e.getWeidu());
-                movingCost = Config.unitCost * dist;
+                movingCost = 2*Config.unitCost * dist;
             }
             //计算group的支付成本和
             double deleiverExpense = CalculateDeleiverExpense.calculate(e.getFirstPrice(), e.getContinuePrice(), e.getScale(), totalWeight, 0, 0, 0);
             totalExpressExpense+=deleiverExpense;
+            // 增加合作成本
+            totalExpressExpense+= 1;
             //计算group中所有用户的移动成本
             totalMovingCost+=movingCost;
+
         }
         totalCharge = totalMovingCost+totalExpressExpense;
         System.out.println("就近寄件合作算法:");
@@ -136,7 +139,7 @@ public class NearAlgorithmDesign {
                 double deleiverExpense = (user.getWeight()/totalWeight)*deleiverExpenseTotal;
                 //移动成本
                 double dist = CalculateDistance.distanceOfTwoPoints(user.getJingdu(), user.getWeidu(), express.getJingdu(), express.getWeidu());
-                double movingCost = Config.unitCost * dist;
+                double movingCost = 2*Config.unitCost * dist;
                 totalMoving+=movingCost;
                 //总成本
                 double total = deleiverExpense + movingCost;
@@ -172,17 +175,6 @@ public class NearAlgorithmDesign {
             }
         }
         return key;
-    }
-
-    public static void main(String[] args) {
-        Map<Integer, Double> map = new HashMap<>();
-        map.put(1,10.0);
-        map.put(2,9.5);
-        map.put(3,11.2);
-        double o = (Double) gerMinValue(map);
-        System.out.println(o);
-        int key = (Integer)getKey(map, o);
-        System.out.println(key);
     }
 
 }

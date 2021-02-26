@@ -21,7 +21,7 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
         //1.初始化：每个用户计算就近的快递点，加入，存在一个成本（包含移动成本和支付成本）
         HashMap<Integer, Object> InitUserAllocation = NearNotCoAlgorithmDesign.alocationMechnism(ESlist, userList);
 //        HashMap<Integer, Object> InitUserAllocation = LowestChargeAlgorithmDesign.alocationMechnism(ESlist, userList);
-        System.out.println(InitUserAllocation);
+//        System.out.println(InitUserAllocation);
         HashMap<Integer, Object> comparedMap = (HashMap<Integer, Object>) InitUserAllocation.clone();//待比较的map
 
         //统计最终结果:总成本
@@ -29,8 +29,9 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
 
         int NumberIterations = 100000;
         int IterationsCount = 1;
+        long startTime = System.currentTimeMillis();
         while (NumberIterations > 0) {
-            System.out.println("迭代次数：" + IterationsCount);
+
             //更新策略
             HashMap<Integer, Object> reverseMap = updateUserSelection(InitUserAllocation, ESlist);
             double currentTotalCost = calcluateTotalCost(reverseMap, ESlist, userList); //当前的成本值
@@ -84,7 +85,7 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
                 }
                 if (userSelect.size() > 0) {
                     int maxEsId = (Integer) getKey(userSelect, (double) gerMaxValue(userSelect));
-                    System.out.println("最大的ES id：" + maxEsId);
+//                    System.out.println("最大的ES id：" + maxEsId);
 //                    System.out.println(userSelect.get(maxEsId));
                     //更新用户选择的策略
                     InitUserAllocation.put(user.getId(), maxEsId);
@@ -109,12 +110,51 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
                 resultMap.put(IterationsCount++, currentTotalCost);
             }
             comparedMap = (HashMap<Integer, Object>) InitUserAllocation.clone();
-            System.out.println(resultMap);
-            System.out.println("userseletion:" + InitUserAllocation);
+//            System.out.println(resultMap);
+//            System.out.println("userseletion:" + InitUserAllocation);
             //计算总的成本和
-            System.out.println("总成本为：" + currentTotalCost);
+//            System.out.println("总成本为：" + currentTotalCost);
+            //2.初始化每个快递点的用户集,都为空集合 key=>EsId value=>用户的id集合
+            HashMap<Integer, Object> userSelectMap = new LinkedHashMap<>();
+            for (ExpressS e :
+                    ESlist) {
+                userSelectMap.put(e.getId(), new ArrayList<Integer>());
+            }
+            for (User user :
+                    userList) {
+                Integer esId = (Integer) comparedMap.get(user.getId());
+                List<Integer> userSetbyEs = (List<Integer>) userSelectMap.get(esId);
+                userSetbyEs.add(user.getId());
+                userSelectMap.put(esId, userSetbyEs);
+            }
+
+            if(IterationsCount%100==0){
+                System.out.println("迭代次数：" + IterationsCount);
+                calcluateResult(userSelectMap, ESlist, userList);
+            }else {
+                long endTime = System.currentTimeMillis();
+                System.out.println("CoGameBasedCoalitionOrderAlgorithmDesign：程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
+                System.out.println("次数：" + IterationsCount);
+                calcluateResult(userSelectMap, ESlist, userList);
+            }
+
+
         }
 
+        //2.初始化每个快递点的用户集,都为空集合 key=>EsId value=>用户的id集合
+        HashMap<Integer, Object> userSelectMap = new LinkedHashMap<>();
+        for (ExpressS e :
+                ESlist) {
+            userSelectMap.put(e.getId(), new ArrayList<Integer>());
+        }
+        for (User user :
+                userList) {
+            Integer esId = (Integer) comparedMap.get(user.getId());
+            List<Integer> userSetbyEs = (List<Integer>) userSelectMap.get(esId);
+            userSetbyEs.add(user.getId());
+            userSelectMap.put(esId, userSetbyEs);
+        }
+        calcluateResult(userSelectMap, ESlist, userList);
         //3.观察策略是否变化
         return comparedMap;
     }
@@ -152,7 +192,7 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
             return false;
         int minKey = (Integer) getKey(hashMap, (double) gerMinValue(hashMap));
         for (Map.Entry<Integer, Double> entry : hashMap.entrySet()) {
-            System.out.println("key=" + minKey + "-" + entry.getKey());
+//            System.out.println("key=" + minKey + "-" + entry.getKey());
             if (value == entry.getValue() && entry.getKey().equals(minKey)) {
                 return true;
             }
@@ -171,6 +211,41 @@ public class CoGameBasedCoalitionOrderAlgorithmDesign {
         else
             return false;
     }
+
+    //计算平均移动成本、平均快递费、平均寄件成本
+    public static void calcluateResult(HashMap<Integer, Object> userSelectMap, List<ExpressS> ESlist, List<User> userList) {
+
+        double totalMovingCost = 0;
+        double totalExpressExpense = 0;
+        double totalCharge = 0;
+
+        for (ExpressS e :
+                ESlist) {
+            List<Integer> userSetbyEs = (List<Integer>) userSelectMap.get(e.getId());
+            double totalWeight = 0;
+            double movingCost = 0;
+            for (Integer userid :
+                    userSetbyEs) {
+                User user = userList.get(userid);
+                //统计group中所有用户的快递费
+                totalWeight += user.getWeight();
+                //移动成本
+                double dist = CalculateDistance.distanceOfTwoPoints(user.getJingdu(), user.getWeidu(), e.getJingdu(), e.getWeidu());
+                movingCost = Config.unitCost * dist;
+            }
+            //计算group的支付成本和
+            double deleiverExpense = CalculateDeleiverExpense.calculate(e.getFirstPrice(), e.getContinuePrice(), e.getScale(), totalWeight, 0, 0, 0);
+            totalExpressExpense += deleiverExpense;
+            //计算group中所有用户的移动成本
+            totalMovingCost += movingCost;
+        }
+        totalCharge = totalMovingCost + totalExpressExpense;
+        System.out.println("CoGameBasedCoalitionOrderAlgorithmDesign:");
+        System.out.println("平均移动成本:" + totalMovingCost / userList.size());
+        System.out.println("平均快递费:" + totalExpressExpense / userList.size());
+        System.out.println("平均寄件成本:" + totalCharge / userList.size());
+    }
+
 
     //遍历寻找最大value
     public static Object gerMaxValue(Map<Integer, Double> map) {

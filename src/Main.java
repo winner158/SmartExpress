@@ -88,7 +88,7 @@ public class Main {
         for (int i = 0; i < userList.size(); i++) {
             numList.add(i);
         }
-        MathOptimizationAlgorithmDesign.calculateMinValue(getExpressSList(), getUserList(),numList);
+        //MathOptimizationAlgorithmDesign.calculateMinValue(getExpressSList(), getUserList(),numList);
 
 //        System.out.println(CoGameBasedSelifishOrderAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));
        // System.out.println(LowestChargeAlgorithmDesign.alocationMechnism(getExpressSList(), getUserList()));

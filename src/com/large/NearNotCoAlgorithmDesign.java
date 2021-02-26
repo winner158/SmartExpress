@@ -32,8 +32,60 @@ public class NearNotCoAlgorithmDesign {
             int esId = (Integer) getKey(userSelect, (double) gerMinValue(userSelect));
             hashMap.put(user.getId(), esId);
         }
+        HashMap<Integer, Object> userSelectMap = new LinkedHashMap<>();
+        for (ExpressS e :
+                ESlist) {
+            userSelectMap.put(e.getId(), new ArrayList<Integer>());
+        }
+        for (User user :
+                userList) {
+            Integer esId = (Integer) hashMap.get(user.getId());
+            List<Integer> userSetbyEs = (List<Integer>) userSelectMap.get(esId);
+            userSetbyEs.add(user.getId());
+            userSelectMap.put(esId,userSetbyEs);
+        }
+        calcluateResult(userSelectMap,ESlist,userList);
         return hashMap;
     }
+
+
+    //计算平均移动成本、平均快递费、平均寄件成本
+    public static void calcluateResult(HashMap<Integer, Object> userSelectMap, List<ExpressS> ESlist, List<User> userList){
+
+        double totalMovingCost = 0;
+        double totalExpressExpense = 0;
+        double totalCharge = 0;
+
+        for (ExpressS e :
+                ESlist) {
+            List<Integer> userSetbyEs = (List<Integer>) userSelectMap.get(e.getId());
+            double totalWeight = 0;
+            double movingCost = 0;
+            double deleiverExpense = 0;
+            for (Integer userid :
+                    userSetbyEs) {
+
+                User user = userList.get(userid);
+                //统计group中所有用户的快递费
+                totalWeight += user.getWeight();
+                //移动成本
+                double dist = CalculateDistance.distanceOfTwoPoints(user.getJingdu(), user.getWeidu(), e.getJingdu(), e.getWeidu());
+                movingCost = Config.unitCost * dist;
+                //计算group的支付成本和
+                deleiverExpense += CalculateDeleiverExpense.calculate(e.getFirstPrice(), e.getContinuePrice(), e.getScale(), user.getWeight(), 0, 0, 0);
+
+            }
+            totalExpressExpense+=deleiverExpense;
+            //计算group中所有用户的移动成本
+            totalMovingCost+=movingCost;
+        }
+        totalCharge = totalMovingCost+totalExpressExpense;
+        System.out.println("就近非合作寄件分配算法:");
+        System.out.println("平均移动成本:"+totalMovingCost/userList.size());
+        System.out.println("平均快递费:"+totalExpressExpense/userList.size());
+        System.out.println("平均寄件成本:"+totalCharge/userList.size());
+    }
+
 
     //输出结果到文件，格式：userid,ESID,moving cost,charge cost, deliver cost
     public static void calcluateCost(List<ExpressS> ESlist, List<User> userList, String filename) {
@@ -56,7 +108,7 @@ public class NearNotCoAlgorithmDesign {
             }
             re.put(ESlist.get(i).getId(), list);
         }
-        System.out.println(re);
+//        System.out.println(re);
 
         double totaltotal =0;
         double totalMoving = 0;
@@ -96,8 +148,8 @@ public class NearNotCoAlgorithmDesign {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("NearNotCoAlgorithmDesign:charge-"+totaltotal);
-        System.out.println("NearNotCoAlgorithmDesign:moving-"+totalMoving);
+//        System.out.println("NearNotCoAlgorithmDesign:charge-"+totaltotal);
+//        System.out.println("NearNotCoAlgorithmDesign:moving-"+totalMoving);
     }
 
 

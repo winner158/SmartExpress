@@ -50,7 +50,7 @@ public class CoAlgorithmDesign {
                 thetaMap.put(e.getId(), thetaSet);//存储theta值
                 System.out.println(thetaSet);
             }
-            //2.获取最大值
+            //2.获取比例最小的分配
             for (ExpressS e :
                     ESlist) {
                 //存储待比较的radio

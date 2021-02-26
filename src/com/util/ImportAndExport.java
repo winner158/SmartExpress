@@ -57,31 +57,43 @@ public class ImportAndExport {
         }
         String[] userSplit = userinfo.split("-");
         System.out.println(userSplit.length);
-        StringBuilder stringBuilder = new StringBuilder();
-        int count = 0;
-        for (String str :
-                userSplit) {
-            User user = new User();
-            String[] rowSplit = str.split(",");
-//            user.setId(count++);
-//            user.setJingdu(Double.parseDouble(rowSplit[0]));
-//            user.setWeidu(Double.parseDouble(rowSplit[1]));
-//            user.setWeight(Double.parseDouble(rowSplit[2]));
-//            user.setLengthP(Double.parseDouble(rowSplit[3]));
-//            user.setWidthP(Double.parseDouble(rowSplit[4]));
-//            user.setHeightP(Double.parseDouble(rowSplit[5]));
-//            user.setUnitCost(Config.unitCost);
-            double weight = Math.random();
-            weight = Double.parseDouble(String.format("%.1f", weight));
-            weight = 1 + weight;
-            stringBuilder.append(rowSplit[0]+","+rowSplit[1]+","+weight+","+"10"+","+"10"+","+"10");
-            stringBuilder.append("\r\n");
+        int number = 0;
+        while(number<100){
+            StringBuilder stringBuilder = new StringBuilder();
+            int count = 0;
+            for (String str :
+                    userSplit) {
+                if(count>49)
+                    break;
+                else {
+                    User user = new User();
+                    String[] rowSplit = str.split(",");
+                    //            user.setId(count++);
+                    //            user.setJingdu(Double.parseDouble(rowSplit[0]));
+                    //            user.setWeidu(Double.parseDouble(rowSplit[1]));
+                    //            user.setWeight(Double.parseDouble(rowSplit[2]));
+                    //            user.setLengthP(Double.parseDouble(rowSplit[3]));
+                    //            user.setWidthP(Double.parseDouble(rowSplit[4]));
+                    //            user.setHeightP(Double.parseDouble(rowSplit[5]));
+                    //            user.setUnitCost(Config.unitCost);
+                    double weight = Math.random();
+                    weight = Double.parseDouble(String.format("%.2f", weight/5));
+//                    weight = 1 + weight;
+                    stringBuilder.append(rowSplit[0]+","+rowSplit[1]+","+weight+","+"10"+","+"10"+","+"10");
+                    stringBuilder.append("\r\n");
+                    count++;
+                }
+
+            }
+            try {
+                exportData("data/small-package-user-"+number+".txt",stringBuilder.toString());
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }finally {
+                number++;
+            }
         }
-        try {
-            exportData("data/large-package-user.txt",stringBuilder.toString());
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+
 
     }
 

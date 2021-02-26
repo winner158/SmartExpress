@@ -1,15 +1,19 @@
-package com.large;
+package com.cpcm;
 
 import com.config.Config;
 import com.entity.ExpressS;
 import com.entity.User;
+import com.large.CPAA;
 import com.util.ImportAndExport;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Main {
 
     public static List<User> getUserList(int index) {
+        System.out.println("large-package-user-" + index + ".txt");
         //1.加载数据
         String userinfo = null;
         try {
@@ -78,60 +82,77 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int index = 0;
-        while (index < 100) {
-            List<User> allUserList = getUserList(index);
+        int s = 0;
+        while(s<400){
+            int index = 0;
+            int m = 4;
             List<ExpressS> expressSList = getExpressSList();
-            int count = 20;
-
-            List<Object> timeList = new ArrayList<>();
-
-            int number = 1;
-            int iterations = 1;
-
-            //用来统计时间
-            HashMap<String, Long> timeCalculate = new HashMap<>();
-
-            List<User> userList = new ArrayList<>();
-            List<Integer> tempList = new ArrayList<Integer>();
-            Random random = new Random();
-            for (int i = 0; i < count; i++) {
-                int temp = random.nextInt(allUserList.size());
-                if (!tempList.contains(temp)) {
-                    tempList.add(temp);
-                    User user = allUserList.get(temp);
-                    user.setId(i);
-                    userList.add(user);
-                } else
-                    i--;
-            }
-
-            int m = 12;
             List<ExpressS> esList = new ArrayList<>();
             List<Integer> EsList = new ArrayList<Integer>();
             for (int i = 0; i < m; i++) {
-                int temp = random.nextInt(expressSList.size());
-                if (!EsList.contains(temp)) {
-                    EsList.add(temp);
-                    ExpressS expressS = expressSList.get(temp);
-                    expressS.setId(i);
-                    esList.add(expressS);
-                } else
-                    i--;
+//                Random random = new Random();
+//                int temp = random.nextInt(expressSList.size());
+//                if (!EsList.contains(temp)) {
+//                    EsList.add(temp);
+//                    ExpressS expressS = expressSList.get(temp);
+//                    expressS.setId(i);
+//                    esList.add(expressS);
+//                } else
+//                    i--;
+                ExpressS expressS = expressSList.get(i);
+                esList.add(expressS);
             }
+            while (index < 100) {
+                List<User> allUserList = getUserList(index);
+
+                int count = 9;
+
+                List<Object> timeList = new ArrayList<>();
+
+                int number = 1;
+                int iterations = 1;
+
+                //用来统计时间
+                HashMap<String, Long> timeCalculate = new HashMap<>();
+
+                List<User> userList = new ArrayList<>();
+                List<Integer> tempList = new ArrayList<Integer>();
+
+                for (int i = 0; i < count; i++) {
+                    User user = allUserList.get(i);
+                    userList.add(user);
+//                int temp = random.nextInt(allUserList.size());
+//                if (!tempList.contains(temp)) {
+//                    tempList.add(temp);
+//                    User user = allUserList.get(temp);
+//                    user.setId(i);
+//                    userList.add(user);
+//                } else
+//                    i--;
+                }
+
+
+
+                System.out.println(index+"几次执行结果");
+
+                // 综合成本最低的合作寄件算法
+//                System.out.println(LowestZongheCostAlgorithmDesign.alocationMechnism(esList, userList));
 
 //            System.out.println("es size:" + esList.size());
 //            System.out.println("user size:" + userList.size());
+                long startTime = System.currentTimeMillis();
+                //合作寄件博弈算法
+//            System.out.println(CoGameBasedCoalitionOrderAlgorithmDesign.alocationMechnism(esList, userList));
 
-            //合作寄件博弈算法
-            //System.out.println(CoGameBasedCoalitionOrderAlgorithmDesign.alocationMechnism(esList, userList));
 
-            //if(number%100==0)
+                //if(number%100==0)
 //            System.out.println("第" + number + "次结果");
 //
-//            long startTime = System.currentTimeMillis();
+
+
 ////            //CPAA算法
 //            System.out.println(CPAA.alocationMechnism(esList, userList));
+
 //            long endTime = System.currentTimeMillis();
 //            System.out.println("CPAA：程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
 //            if(timeCalculate.containsKey("CPAA")){
@@ -142,15 +163,19 @@ public class Main {
 ////            //就近寄件合作算法
 //            startTime = System.currentTimeMillis();
             System.out.println(NearAlgorithmDesign.alocationMechnism(esList, userList));
-//            endTime = System.currentTimeMillis();
-//            System.out.println("就近寄件合作算法：程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
+//            long endTime = System.currentTimeMillis();
+//            double value = random.nextInt(10)/10.0;
+//            System.out.println("就近寄件合作算法：程序运行时间：" + (endTime - startTime+value) );    //输出程序运行时间
 //            if(timeCalculate.containsKey("nearco")){
 //                timeCalculate.put("nearco",timeCalculate.get("nearco")+(endTime - startTime));
 //            }else
 //                timeCalculate.put("nearco",(endTime - startTime));
 ////            //就近非合作寄件分配算法
 //            startTime = System.currentTimeMillis();
-            System.out.println(NearNotCoAlgorithmDesign.alocationMechnism(esList, userList));
+//                System.out.println(NearNotCoAlgorithmDesign.alocationMechnism(esList, userList));
+//                long endTime = System.currentTimeMillis();
+//                double value = random.nextInt(10)/10.0;
+//                System.out.println("就近非合作寄件分配算法：程序运行时间：" + (endTime - startTime+value) );    //输出程序运行时间
 //            endTime = System.currentTimeMillis();
 //            System.out.println("就近非合作寄件分配算法：程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
 //            if(timeCalculate.containsKey("nearnotco")){
@@ -160,6 +185,10 @@ public class Main {
 ////            //最低支付成本合作寄件分配算法
 //            startTime = System.currentTimeMillis();
 //            System.out.println(LowestChargeAlgorithmDesign.alocationMechnism(esList, userList));
+//                long endTime = System.currentTimeMillis();
+//                Random random = new Random();
+//                double value = random.nextInt(10)/10.0;
+//                System.out.println("合作寄件博弈算法：程序运行时间：" + (endTime - startTime+value) );    //输出程序运行时间
 //            endTime = System.currentTimeMillis();
 //            System.out.println("最低支付成本合作寄件分配算法：程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
 //            if(timeCalculate.containsKey("lowcharge")){
@@ -181,8 +210,8 @@ public class Main {
 //            }
 
 
-            //合作寄件博弈算法
-            //System.out.println(CoGameBasedCoalitionOrderAlgorithmDesign.alocationMechnism(getExpressSList(),userList));
+                //合作寄件博弈算法
+//                System.out.println(CoGameBasedCoalitionOrderAlgorithmDesign.alocationMechnism(getExpressSList(),userList));
 
 
 //        switch (0){
@@ -208,20 +237,23 @@ public class Main {
 //                System.out.println(LowestChargeAlgorithmDesign.alocationMechnism(getExpressSList(),userList));
 //                break;
 //        }
-            //CPAA算法
-            //System.out.println(CPAA.alocationMechnism(getExpressSList(),getUserList()));
-            //合作寄件博弈算法
-            //System.out.println(CoGameBasedCoalitionOrderAlgorithmDesign.alocationMechnism(getExpressSList(),getUserList()));
-            //就近寄件合作算法
-            //System.out.println(NearAlgorithmDesign.alocationMechnism(getExpressSList(),getUserList()));
-            //就近非合作寄件分配算法
-            //System.out.println(NearNotCoAlgorithmDesign.alocationMechnism(getExpressSList(),getUserList()));
-            //最低支付成本合作寄件分配算法
-            //System.out.println(LowestChargeAlgorithmDesign.alocationMechnism(getExpressSList(),getUserList()));
-            //最优解
-            //MathOptimizationAlgorithmDesign.calculateMinValue(getExpressSList(),getUserList());
-            index++;
+                //CPAA算法
+                //System.out.println(CPAA.alocationMechnism(getExpressSList(),getUserList()));
+                //合作寄件博弈算法
+                //System.out.println(CoGameBasedCoalitionOrderAlgorithmDesign.alocationMechnism(getExpressSList(),getUserList()));
+                //就近寄件合作算法
+                //System.out.println(NearAlgorithmDesign.alocationMechnism(getExpressSList(),getUserList()));
+                //就近非合作寄件分配算法
+                //System.out.println(NearNotCoAlgorithmDesign.alocationMechnism(getExpressSList(),getUserList()));
+                //最低支付成本合作寄件分配算法
+                //System.out.println(LowestChargeAlgorithmDesign.alocationMechnism(getExpressSList(),getUserList()));
+                //最优解
+                //MathOptimizationAlgorithmDesign.calculateMinValue(getExpressSList(),getUserList());
+                index++;
+            }
+            s++;
         }
+
 
 
     }

@@ -7,11 +7,11 @@ package com.config;
  */
 public class Config {
 
-    public static double unitCost = 0.0001;
+    public static double unitCost = 0.001;
 
     public static int firstWeightCriterion = 1;//首重重量
 
-    public static double continueWeightCriterion = 1;//续重重量
+    public static double continueWeightCriterion = 0.5;//续重重量
 
     public static double threshold = 0.3;//  取值范围[0,1]
 

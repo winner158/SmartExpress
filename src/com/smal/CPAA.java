@@ -1,13 +1,11 @@
-package com.large;
+package com.smal;
 
 import com.config.Config;
 import com.entity.ExpressS;
 import com.entity.User;
-import com.google.common.collect.Lists;
 import com.util.CalculateDeleiverExpense;
 import com.util.CalculateDistance;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -17,6 +15,7 @@ import java.util.*;
  * @Date: 2020-02-21 18:15
  */
 public class CPAA {
+
 
     public static HashMap<Integer, Object> alocationMechnism(List<ExpressS> ESlist, List<User> userList) {
         /**
@@ -95,42 +94,54 @@ public class CPAA {
     public static List<Integer> binarySearch(ExpressS e, List<Integer> userGroup, List<Integer> unSelectedUserList, List<User> userList) {
 
         List<Integer> re = new ArrayList<>();
-        //1.
         double low = 0;
         List<Integer> initUserGroup = new ArrayList<Integer>(userGroup);
         initUserGroup.addAll(unSelectedUserList);
-        //2.
         double high = calcluateCost(initUserGroup, userList, e) / unSelectedUserList.size();
-        //3.
         double mid = (low + high) / 2;
 
         int count = 0;
 
+//        System.out.println("init high:"+high);
+//
+//        System.out.println("init mid:"+mid);
+
         while (true) {
+
+//            System.out.println("userGroup:"+userGroup);
+//
+//            System.out.println("mid:"+mid);
+//
+//            System.out.println("执行次数："+count++);
 
             //存储待比较的radio key=>subSets-Id value=>marginValue
             HashMap<Integer, Double> radioMap = new HashMap<Integer, Double>();
 
             List<List<Integer>> subSets = getSubSets(unSelectedUserList);
-
+//            System.out.println(subSets);
             for (int i = 0; i < subSets.size(); i++) {
                 List<Integer> tempUserGroup = new ArrayList<Integer>(userGroup);
                 tempUserGroup.addAll(subSets.get(i));
-                //4.
+//                System.out.println("userGroup:"+userGroup);
+//                System.out.println("tempUserGroup:"+tempUserGroup);
                 double marginValue = calcluateCost(tempUserGroup, userList, e) - mid * subSets.get(i).size();
                 radioMap.put(i, marginValue);
+              //  System.out.println("marginValue:"+marginValue);
             }
 
-            //5.查找marginValue最小的分配集合
-            int minKeyId = (Integer) getKey(radioMap, (double) gerMinValue(radioMap));
+//            System.out.println("radioMap=>"+radioMap);
 
+            //查找marginValue最小的分配集合
+            int minKeyId = (Integer) getKey(radioMap, (double) gerMinValue(radioMap));
+//            System.out.println("minvalue："+radioMap.get(minKeyId));
+//            System.out.println("minList："+subSets.get(minKeyId));
             //查找marginValue中最小的候选集合的value=>list
             List<Integer> marginList = subSets.get(minKeyId);
             //计算合并最有集合之后的阈值
             List<Integer> afterOptionalUserGroup = new ArrayList<Integer>(userGroup);
             afterOptionalUserGroup.addAll(marginList);
             //第一条件判断
-
+//            System.out.println("第一条件判断:"+Math.abs(calcluateCost(afterOptionalUserGroup, userList, e) / marginList.size() - mid));
             if (Math.abs(calcluateCost(afterOptionalUserGroup, userList, e) / marginList.size() - mid) < Config.threshold) {
                 re = marginList;
                 break;
@@ -142,6 +153,7 @@ public class CPAA {
                 low = mid;
             }
             mid = (low + high) / 2;
+//            System.out.println("mid:"+mid);
         }
         return re;
     }
